@@ -256,7 +256,9 @@ plt.show()
 ## Discussion Questions for Challenge
 
 1. **Numerical vs Categorical Encoding:** There are two modelsin Python written above. For each language, the models differ by how zip code is modelled, either as a numerical variable or as a categorical variable. Given what you know about zip codes and real estate prices, how should zip code be modelled, numerically or categorically?  Is zipcode and ordinal or non-ordinal variable?
+
 Answer:
+
 ZIP code should be modeled as a categorical, non ordinal variable, because the numeric order of ZIP codes does not reflect real neighborhood differences in housing prices.
 (1). Numerical ZIP Code: The Tree Cannot Use It Meaningfully
 When ZIP code is treated as a number, the tree can only split it as if it were a continuous variable, for example: “Is zip Code ≤ 1489.5?” (This kind of cutoff between two five digit codes is mathematically valid but economically meaningless.)
@@ -266,7 +268,9 @@ When ZIP code is one hot encoded, each ZIP becomes its own yes/no feature, allow
 In the second Feature Importance Plot, the stacked bar representing ZIP related features now carries real weight. The tree can finally split on meaningful neighborhood boundaries instead of fake numeric cut points. This produces a more realistic picture of how location influences housing prices.
 
 2. **R vs Python Implementation Differences:** When modelling zip code as a categorical variable, the output tree and feature importance would differ quite significantly had you used R as opposed to Python. Investigate why this is the case.  What does R offer that Python does not? Which language would you say does a better job of modelling zip code as a categorical variable? Can you quote the documentation at [https://scikit-learn.org/stable/modules/tree.html](https://scikit-learn.org/stable/modules/tree.html) suggesting a weakness in the Python implementation? If so, please provide a quote from the documentation.
+
 Answer:
+
 When ZIP code is modeled as a categorical variable, R and Python produce different decision trees and feature importance results. The main reason is that R has native support for categorical variables, while Python’s scikit learn does not. 
 In R, ZIP code can be declared directly as a factor inside a formula, such as: SalePrice ~ GrLivArea + factor(zipCode). And tree packages such as rpart can search splits that group levels together, for example: “ZIP group A vs ZIP group B”. This means R treats ZIP code as one variable with many levels, which matches how neighborhoods work.
 In contrast, Python’s DecisionTreeRegressor cannot handle categorical variables directly. The scikit learn documentation states clearly: “the scikit-learn implementation does not support categorical variables for now.” Because of this limitation, Python requires one hot encoding, which turns ZIP code into many separate 0/1 columns. The tree then splits each dummy variable independently, which changes both the structure of the tree and how feature importance is distributed. As a result, Python’s importance plot becomes more fragmented, while R reports importance at the factor level, making “location” easier to interpret as a single predictor.
